@@ -43,10 +43,10 @@ MODEL_CONFIG = {
 
 # Training Configuration - Default
 TRAINING_CONFIG = {
-    'num_epochs': 12,
+    'num_epochs': 10,
     'batch_size': 16,
-    'learning_rate': 0.00005,
-    'weight_decay': 1e-3,
+    'learning_rate': 0.0001,
+    'weight_decay': 1e-4,
     'optimizer': 'adam',
     'scheduler': 'cosine',
     'patience': 5,

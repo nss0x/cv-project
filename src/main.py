@@ -40,7 +40,7 @@ def create_objective_function(model_template, train_loader, val_loader, num_clas
                 'resnet18',
                 num_classes=num_classes,
                 pretrained=True,
-                dropout_rate=0.7
+                dropout_rate=0.5
             )
             
             # Create trainer
@@ -116,7 +116,7 @@ def main():
     
     # Create model
     print("\nCreating model...")
-    model = create_model('resnet18', num_classes=num_classes, pretrained=True, dropout_rate=0.7)
+    model = create_model('resnet18', num_classes=num_classes, pretrained=True, dropout_rate=0.5)
     print(f"Model: ResNet-18")
     print(f"Trainable parameters: {count_parameters(model):,}")
     

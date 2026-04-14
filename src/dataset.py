@@ -3,7 +3,7 @@ Dataset loading and preprocessing
 """
 import torch
 import numpy as np
-from torch.utils.data import DataLoader, random_split, WeightedRandomSampler
+from torch.utils.data import DataLoader, random_split
 from torchvision import datasets, transforms
 import os
 from config import DATA_DIR, DATASETS, SEED
@@ -29,10 +29,7 @@ class MedicalImageDataset:
         self.train_transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.RandomHorizontalFlip(p=0.5),
-            transforms.RandomVerticalFlip(p=0.5),
-            transforms.RandomRotation(25),
-            transforms.RandomAffine(degrees=0, translate=(0.1, 0.1)),
-            transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),
+            transforms.RandomRotation(10),
             transforms.ToTensor(),
             transforms.Normalize(
                 mean=[0.485, 0.456, 0.406],
@@ -87,22 +84,11 @@ class MedicalImageDataset:
             val_dataset.dataset.transform = self.val_transforms
             test_dataset.dataset.transform = self.val_transforms
             
-            # Create weighted sampler for balanced training
-            targets = np.array([label for _, label in train_dataset])
-            class_counts = np.bincount(targets)
-            class_weights = 1.0 / torch.tensor(class_counts, dtype=torch.float)
-            sample_weights = class_weights[targets]
-            sampler = WeightedRandomSampler(
-                weights=sample_weights,
-                num_samples=len(sample_weights),
-                replacement=True
-            )
-            
-            # Create data loaders with weighted sampler for train
+            # Create data loaders (simple shuffling for train)
             self.train_loader = DataLoader(
                 train_dataset,
                 batch_size=self.batch_size,
-                sampler=sampler,
+                shuffle=True,
                 num_workers=2,
                 pin_memory=True
             )
